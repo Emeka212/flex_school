@@ -27,6 +27,6 @@ class CheckNetworkStatus {
         response +=
             'No internet connection detected, please put on your data or connect to a wifi';
     }
-    return {"status": status, "msg": response};
+    return {"status": status, "response": response};
   }
 }

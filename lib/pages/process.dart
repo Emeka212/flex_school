@@ -123,7 +123,11 @@ TextEditingController _idController = TextEditingController();
 // LOGIN PROCESS FUNCTION
 //======================================================================
 _loginProcess({required BuildContext context}) async {
-  String result = await API().query(query: "query");
+  String result = await API().query(
+    query: "",
+    clientID: _idController.text,
+    dataMode: 'GET SCHOOL CLIENT ID',
+  );
   print(result);
   // Navigator.pushNamed(context, route.userLoginPage);
 }
