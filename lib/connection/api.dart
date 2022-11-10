@@ -1,24 +1,23 @@
 import 'connection_checker.dart';
 import 'package:http/http.dart' as http;
+import '../components/public_variables.dart';
 
 //========================================================
 // API FUNCTION FOR THIS PROJECT
 //========================================================
 class API {
   Future<String> query({
-    required String query,
-    required String dataMode,
-    required String clientID,
+    String? query,
+    String? dataMode,
+    String? clientID,
   }) async {
     Map internetResult = await CheckNetworkStatus().check();
     http.Response result;
     String urlstring =
-        "http://api.flexpda.com/api/values?Query=$query&ClientID=$clientID&DataMode=$dataMode&AllowedPlatforms=ANDROID"
-            .replaceAll(" ", "+");
-
+        "http://api.flexpda.com/api/values?Query=${query ?? 'a'}&ClientID=${clientID ?? PublicVariables.schoolDetails.getAt(0)!['ClientID']}&DataMode=$dataMode&AllowedPlatforms=ANDROID";
+    print(urlstring);
     if (!internetResult['status']) return internetResult['response'].toString();
     try {
-      print(urlstring);
       result = await http.get(Uri.parse(urlstring));
       if (result.statusCode == 200) {
         return result.body;
@@ -30,7 +29,3 @@ class API {
     }
   }
 }
-
-
-// datamode: GET SCHOOL CLIENT ID
-// query: 

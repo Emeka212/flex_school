@@ -5,9 +5,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox<String>("user");
-  await Hive.openBox<String>("parent");
+  await Hive.openBox<bool>("parent");
+  await Hive.openBox<bool>("schoolUser");
   await Hive.openBox<bool>("isDarkTheme");
+  await Hive.openBox<Map>("schoolDetails");
+
   runApp(
     MaterialApp(
       initialRoute: route.indexPage,

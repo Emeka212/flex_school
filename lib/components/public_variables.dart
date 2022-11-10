@@ -1,6 +1,11 @@
+import 'package:hive/hive.dart';
+
 //======================================================================
 // RUN FUNCTION EVERYTIME PAGE BUILD
 //======================================================================
 class PublicVariables {
-  static late bool isDarkTheme;
+  static late Box<bool> parentDB;
+  static late Box<bool> schoolUserDB;
+  static late Box<Map> schoolDetails;
+  static late Box<bool> isDarkThemeDB;
 }

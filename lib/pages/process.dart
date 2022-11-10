@@ -1,9 +1,11 @@
-import 'package:flex_school/connection/api.dart';
+import 'dart:convert';
 
 import '../components/component.dart';
 import 'package:flutter/material.dart';
 import '../routes/routes.dart' as route;
+import '../components/public_variables.dart';
 import 'package:flex_school/theme/theme.dart';
+import 'package:flex_school/connection/api.dart';
 
 class ProcessPage extends StatefulWidget {
   const ProcessPage({super.key});
@@ -12,6 +14,11 @@ class ProcessPage extends StatefulWidget {
 }
 
 class _ProcessPageState extends State<ProcessPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,19 +80,6 @@ class _BodyWidget extends StatelessWidget {
               Row(
                 children: [
                   PublicCheckBox(
-                    value: _parentUserheckbox,
-                    onPressed: (val) {
-                      _parentUserheckbox = val;
-                      setState('');
-                    },
-                  ),
-                  const SizedBox(width: 5.0),
-                  PublicTextWidget(
-                    text: "Login as School User",
-                    color: AppTheme().textColor.withOpacity(0.8),
-                  ),
-                  const Spacer(),
-                  PublicCheckBox(
                     value: _schoolUserCheckbox,
                     onPressed: (val) {
                       _schoolUserCheckbox = val;
@@ -94,7 +88,20 @@ class _BodyWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 5.0),
                   PublicTextWidget(
-                    text: "Login as a Parent",
+                    text: "Process Me as School User",
+                    color: AppTheme().textColor.withOpacity(0.8),
+                  ),
+                  const Spacer(),
+                  PublicCheckBox(
+                    value: _parentCheckbox,
+                    onPressed: (val) {
+                      _parentCheckbox = val;
+                      setState('');
+                    },
+                  ),
+                  const SizedBox(width: 5.0),
+                  PublicTextWidget(
+                    text: "Process Me as a Parent",
                     color: AppTheme().textColor.withOpacity(0.8),
                   ),
                 ],
@@ -115,7 +122,7 @@ class _BodyWidget extends StatelessWidget {
 //======================================================================
 // REQUIRED VARIABLES
 //======================================================================
-bool _parentUserheckbox = false;
+bool _parentCheckbox = false;
 bool _schoolUserCheckbox = false;
 TextEditingController _idController = TextEditingController();
 
@@ -123,11 +130,25 @@ TextEditingController _idController = TextEditingController();
 // LOGIN PROCESS FUNCTION
 //======================================================================
 _loginProcess({required BuildContext context}) async {
-  String result = await API().query(
-    query: "",
-    clientID: _idController.text,
-    dataMode: 'GET SCHOOL CLIENT ID',
-  );
-  print(result);
-  // Navigator.pushNamed(context, route.userLoginPage);
+  String schoolID = _idController.text;
+  String dataMode = "GET SCHOOL CLIENT ID";
+  if (_parentCheckbox == false && _schoolUserCheckbox == false) {
+    String content = "You must select an option below";
+    PublicNonOptionalAlertDialog().show(title: "Error", content: content);
+    return;
+  }
+  PublicProgressBar().show();
+  String result = await API().query(clientID: schoolID, dataMode: dataMode);
+  PublicProgressBar().remove();
+  if (result.toLowerCase().contains("error:")) {
+    String content = result.toLowerCase().split("error:").last;
+    PublicNonOptionalAlertDialog().show(title: "Error", content: content);
+    return;
+  }
+  Map jsonResult = jsonDecode(json.decode(result));
+  PublicVariables.schoolUserDB.put(0, _parentCheckbox);
+  PublicVariables.parentDB.put(0, _schoolUserCheckbox);
+  PublicVariables.schoolDetails.put(0, jsonResult['message'][0]);
+  // ignore: use_build_context_synchronously
+  Navigator.pushReplacementNamed(context, route.indexPage);
 }

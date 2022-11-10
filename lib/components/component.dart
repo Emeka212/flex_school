@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../routes/routes.dart' as route;
 import 'package:flex_school/theme/theme.dart';
 
 //======================================================================
@@ -178,4 +179,67 @@ class PublicSnackBar extends SnackBar {
     super.behavior = SnackBarBehavior.floating,
     super.backgroundColor = const Color(0xff1e1c24),
   }) : super(key: key);
+}
+
+//=========================================================
+// PUBLIC PROGRESS BAR WIDGET
+//=========================================================
+class PublicProgressBar {
+  // PUBLIC PROGRESS BAR WIDGET
+  show() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        barrierDismissible: false,
+        context: route.navigatorKey.currentContext as BuildContext,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: () async => false,
+            child: Center(
+              child: Container(
+                width: 50.0,
+                height: 50.0,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: AppTheme().bgColor,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: CircularProgressIndicator(color: AppTheme().brandColor),
+              ),
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  // PUBLIC PROGRESS BAR WIDGET
+  remove() {
+    Navigator.of(route.navigatorKey.currentContext as BuildContext).pop();
+  }
+}
+
+//=========================================================
+// PUBLIC NON OPTIONAL ALERT DIALOG
+//=========================================================
+class PublicNonOptionalAlertDialog {
+  show({required String title, required String content}) {
+    showDialog(
+      context: route.navigatorKey.currentContext as BuildContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          titlePadding: const EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(10),
+          actionsPadding: const EdgeInsets.all(0),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

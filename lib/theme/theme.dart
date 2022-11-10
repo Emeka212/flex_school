@@ -6,15 +6,16 @@ import '../components/public_variables.dart';
 //======================================================================
 class AppTheme {
   Color brandColor = Colors.pink.shade800;
-  Color bgColor =
-      PublicVariables.isDarkTheme ? DarkTheme().bgColor : LightTheme().bgColor;
-  Color primaryColor = PublicVariables.isDarkTheme
+  Color bgColor = PublicVariables.isDarkThemeDB.get(0) as bool
+      ? DarkTheme().bgColor
+      : LightTheme().bgColor;
+  Color primaryColor = PublicVariables.isDarkThemeDB.get(0) as bool
       ? DarkTheme().primaryColor
       : LightTheme().primaryColor;
-  Color textColor = PublicVariables.isDarkTheme
+  Color textColor = PublicVariables.isDarkThemeDB.get(0) as bool
       ? DarkTheme().textColor
       : LightTheme().textColor;
-  Color lightDark = PublicVariables.isDarkTheme
+  Color lightDark = PublicVariables.isDarkThemeDB.get(0) as bool
       ? DarkTheme().lightDark
       : LightTheme().lightDark;
 }

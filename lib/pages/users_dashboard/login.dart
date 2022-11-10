@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../components/public_variables.dart';
+import '../../connection/api.dart';
 import '../../routes/routes.dart' as route;
 import 'package:flex_school/theme/theme.dart';
 import 'package:flex_school/components/component.dart';
@@ -101,7 +103,7 @@ class _BodyWidget extends StatelessWidget {
                   Expanded(
                     child: PublicTextButton(
                       value: "Log In",
-                      onPressed: (val) {},
+                      onPressed: (val) => _loginProcess(),
                     ),
                   ),
                   const SizedBox(width: 10.0),
@@ -155,7 +157,23 @@ TextEditingController _passwordController = TextEditingController();
 //======================================================================
 // LOGIN PROCESS FUNCTION
 //======================================================================
-_loginProcess() {}
+_loginProcess() async {
+  var coyCode = PublicVariables.schoolDetails.getAt(0)!['CoyCode'];
+  var deviceID = PublicVariables.schoolDetails.getAt(0)!['DeviceID'];
+  if (_idController.text.isEmpty && _passwordController.text.isEmpty) {
+    String content = "All feild must not be empty";
+    PublicNonOptionalAlertDialog().show(title: "Error", content: content);
+    return;
+  }
+  PublicProgressBar().show();
+  String result = await API().query(
+    dataMode: "SchoolLogin",
+    query:
+        "$coyCode;${_idController.text};${_passwordController.text};User;$deviceID",
+  );
+  PublicProgressBar().remove();
+  print(result);
+}
 
 //======================================================================
 // FINGERPRINT LOGIN FUNCTION
