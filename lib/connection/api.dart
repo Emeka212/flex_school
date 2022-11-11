@@ -15,7 +15,6 @@ class API {
     http.Response result;
     String urlstring =
         "http://api.flexpda.com/api/values?Query=${query ?? 'a'}&ClientID=${clientID ?? PublicVariables.schoolDetails.getAt(0)!['ClientID']}&DataMode=$dataMode&AllowedPlatforms=ANDROID";
-    print(urlstring);
     if (!internetResult['status']) return internetResult['response'].toString();
     try {
       result = await http.get(Uri.parse(urlstring));

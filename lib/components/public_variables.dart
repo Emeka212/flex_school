@@ -8,4 +8,5 @@ class PublicVariables {
   static late Box<bool> schoolUserDB;
   static late Box<Map> schoolDetails;
   static late Box<bool> isDarkThemeDB;
+  static late Map<String, dynamic> loginPageApiData;
 }

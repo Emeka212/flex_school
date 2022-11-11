@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import '../../components/public_variables.dart';
+import 'dart:convert';
 import '../../connection/api.dart';
+import 'package:flutter/material.dart';
 import '../../routes/routes.dart' as route;
 import 'package:flex_school/theme/theme.dart';
+import '../../components/public_variables.dart';
 import 'package:flex_school/components/component.dart';
 
 class UserLoginPage extends StatefulWidget {
@@ -103,7 +104,7 @@ class _BodyWidget extends StatelessWidget {
                   Expanded(
                     child: PublicTextButton(
                       value: "Log In",
-                      onPressed: (val) => _loginProcess(),
+                      onPressed: (val) => _loginProcess(context: context),
                     ),
                   ),
                   const SizedBox(width: 10.0),
@@ -147,9 +148,9 @@ class _BodyWidget extends StatelessWidget {
   }
 }
 
-// //======================================================================
-// // REQUIRED VARIABLES
-// //======================================================================
+//======================================================================
+// REQUIRED VARIABLES
+//======================================================================
 bool _rememberMe = true;
 TextEditingController _idController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
@@ -157,7 +158,9 @@ TextEditingController _passwordController = TextEditingController();
 //======================================================================
 // LOGIN PROCESS FUNCTION
 //======================================================================
-_loginProcess() async {
+_loginProcess({required BuildContext context}) async {
+  String id = _idController.text;
+  String pass = _passwordController.text;
   var coyCode = PublicVariables.schoolDetails.getAt(0)!['CoyCode'];
   var deviceID = PublicVariables.schoolDetails.getAt(0)!['DeviceID'];
   if (_idController.text.isEmpty && _passwordController.text.isEmpty) {
@@ -168,11 +171,17 @@ _loginProcess() async {
   PublicProgressBar().show();
   String result = await API().query(
     dataMode: "SchoolLogin",
-    query:
-        "$coyCode;${_idController.text};${_passwordController.text};User;$deviceID",
+    query: "$coyCode;$id;$pass;User;$deviceID",
   );
   PublicProgressBar().remove();
-  print(result);
+  if (result.toLowerCase().contains("error:")) {
+    PublicNonOptionalAlertDialog().show(title: "Error", content: result);
+    return;
+  }
+  PublicVariables.loginPageApiData = jsonDecode(json.decode(result));
+  // ignore: use_build_context_synchronously
+  Navigator.pushNamed(context, route.schoolUserIndexPage);
+  print(PublicVariables.loginPageApiData);
 }
 
 //======================================================================
