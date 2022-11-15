@@ -38,7 +38,7 @@ class _BodyWidget extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            const _Widget1(),
+            _Widget1(setState: (value) => setState('')),
             _Widget2(setState: (value) => setState('')),
           ],
         ),
@@ -51,7 +51,8 @@ class _BodyWidget extends StatelessWidget {
 // TOP WIDGET
 //============================================================
 class _Widget1 extends StatelessWidget {
-  const _Widget1({super.key});
+  final ValueChanged setState;
+  const _Widget1({required this.setState});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +81,10 @@ class _Widget1 extends StatelessWidget {
                   color: AppTheme().primaryColor,
                   child: PublicIconButton(
                     icon: Icon(Icons.search_rounded, color: AppTheme().bgColor),
-                    onPressed: (val) {},
+                    onPressed: (val) {
+                      _voucherLookupBoxVisible = true;
+                      setState('');
+                    },
                   ),
                 ),
               ),
@@ -110,6 +114,172 @@ class _Widget1 extends StatelessWidget {
                 onPressed: (val) {},
               ),
             ],
+          ),
+          Visibility(
+            visible: _voucherLookupBoxVisible,
+            child: _VoucherLookupBox(setState: (value) => setState('')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//============================================================
+// VOUCHER LOOKUP BOX WIDGET
+//============================================================
+String? _voucherLookupBoxSexVal;
+String? _voucherLookupBoxStatusVal;
+bool _voucherLookupBoxVisible = false;
+String? _voucherLookupBoxStudentClassVal;
+late List<Map<String, dynamic>> _vocherLookupBoxItem;
+TextEditingController _voucherLookupBoxSurnameCon = TextEditingController();
+TextEditingController _voucherLookupBoxFirstNameCon = TextEditingController();
+TextEditingController _voucherLookupBoxStudentNoCon = TextEditingController();
+
+class _VoucherLookupBox extends StatelessWidget {
+  final ValueChanged setState;
+  const _VoucherLookupBox({required this.setState});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> vocherLookupBoxTableRowTitle = [
+      "SN",
+      "Student Number	",
+      "Student Full Name	",
+      "Status",
+    ];
+    _vocherLookupBoxItem = [
+      {
+        "type": "Text Feild",
+        "hint": "Student No",
+        "icon": const Icon(Icons.card_membership_outlined),
+        "controller": _voucherLookupBoxStudentNoCon,
+      },
+      {
+        "type": "Text Feild",
+        "hint": "Surname",
+        "icon": const Icon(Icons.person),
+        "controller": _voucherLookupBoxSurnameCon,
+      },
+      {
+        "type": "Text Feild",
+        "hint": "First Name",
+        "icon": const Icon(Icons.person),
+        "controller": _voucherLookupBoxFirstNameCon,
+      },
+      {
+        "type": "dropdown",
+        "hint": "Student Class",
+        "selectedValue": _voucherLookupBoxStudentClassVal,
+        "values": [],
+        "items": [],
+      },
+      {
+        "type": "dropdown",
+        "hint": "Sex",
+        "selectedValue": _voucherLookupBoxSexVal,
+        "values": [],
+        "items": [],
+      },
+      {
+        "type": "dropdown",
+        "hint": "Status",
+        "selectedValue": _voucherLookupBoxStatusVal,
+        "values": [],
+        "items": [],
+      },
+    ];
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 50.0,
+            width: double.infinity,
+            color: AppTheme().primaryColor,
+            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PublicTextWidget(
+                  text: "Voucher Lookup Box",
+                  color: AppTheme().bgColor,
+                ),
+                GestureDetector(
+                  onTap: () => setState(_voucherLookupBoxVisible = false),
+                  child: PublicTextWidget(
+                    text: "Close",
+                    color: AppTheme().bgColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          for (int i = 0; i < _vocherLookupBoxItem.length; i++) ...{
+            if (_vocherLookupBoxItem[i]['type'] == "Text Feild") ...{
+              PublicTextWidget(text: _vocherLookupBoxItem[i]['hint']),
+              const SizedBox(height: 5.0),
+              PublicTextFeild(
+                hint: _vocherLookupBoxItem[i]['hint'],
+                suffixIcon: _vocherLookupBoxItem[i]['icon'],
+                controller: _vocherLookupBoxItem[i]['controller'],
+              ),
+              const SizedBox(height: 10.0),
+            } else ...{
+              PublicTextWidget(text: _vocherLookupBoxItem[i]['hint']),
+              const SizedBox(height: 5.0),
+              PublicDropdownWidget(
+                hint: _vocherLookupBoxItem[i]['hint'],
+                items: _vocherLookupBoxItem[i]['items'],
+                values: _vocherLookupBoxItem[i]['values'],
+                selectedValue: _vocherLookupBoxItem[i]['selectedValue'],
+                onSelect: (val) {
+                  _vocherLookupBoxItem[i]['hint'] = val;
+                  setState('');
+                },
+              ),
+              const SizedBox(height: 10.0),
+            }
+          },
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Table(
+              defaultColumnWidth: const IntrinsicColumnWidth(),
+              border: TableBorder.all(color: AppTheme().lightDark),
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: [
+                TableRow(
+                  children: [
+                    for (int i = 0;
+                        i < vocherLookupBoxTableRowTitle.length;
+                        i++) ...{
+                      TableCell(
+                        verticalAlignment: TableCellVerticalAlignment.top,
+                        child: Container(
+                          color: Colors.blue.shade900,
+                          padding: const EdgeInsets.all(10.0),
+                          child: PublicTextWidget(
+                            text: vocherLookupBoxTableRowTitle[i],
+                            color: AppTheme().bgColor,
+                          ),
+                        ),
+                      ),
+                    }
+                  ],
+                ),
+                TableRow(
+                  decoration: BoxDecoration(color: Colors.grey.shade400),
+                  children: [
+                    for (int i = 0;
+                        i < vocherLookupBoxTableRowTitle.length;
+                        i++)
+                      Container(height: 40),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -161,9 +331,9 @@ class _Widget2 extends StatelessWidget {
               children: [
                 _Tab1(setState: (value) => setState('')),
                 const _Tab2(),
-                _Tab3(),
-                _Tab1(setState: (value) {}),
-                _Tab1(setState: (value) {}),
+                _Tab3(setState: (value) => setState('')),
+                _Tab4(setState: (value) => setState('')),
+                _Tab5(setState: (value) => setState('')),
               ],
             ),
           ),
@@ -494,14 +664,271 @@ class _Tab2 extends StatelessWidget {
 //============================================================
 // TAB 3
 //============================================================
+String _tab3ParentImgFile = "";
+String _tab3StudentImgFile = "";
+late List<Map<String, dynamic>> _tab3Items;
+
 class _Tab3 extends StatelessWidget {
-  const _Tab3({super.key});
+  final ValueChanged setState;
+  const _Tab3({required this.setState});
 
   @override
   Widget build(BuildContext context) {
+    _tab3Items = [
+      {
+        "hint": "Student Image (Click to select Image)",
+        "imagefile": _tab3StudentImgFile
+      },
+      {
+        "hint": "Parent Image (Click to select Image)",
+        "imagefile": _tab3ParentImgFile
+      },
+    ];
     return SingleChildScrollView(
-      child: Column(
-        children: [],
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < _tab3Items.length; i++) ...{
+              PublicTextWidget(text: _tab3Items[i]['hint']),
+              const SizedBox(height: 5.0),
+              Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: AppTheme().lightDark),
+                ),
+                child: Icon(
+                  Icons.camera_alt_rounded,
+                  size: 50.0,
+                  color: AppTheme().lightDark,
+                ),
+              ),
+              const SizedBox(height: 10.0),
+            }
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//============================================================
+// TAB 4 (Student Activities Tab)
+//============================================================
+String? _tab4TermVal;
+String? _tab4ClassVal;
+String? _tab4AcademicSessionVal;
+TextEditingController _tab4ToController = TextEditingController();
+TextEditingController _tab4FromController = TextEditingController();
+
+class _Tab4 extends StatelessWidget {
+  final ValueChanged setState;
+  const _Tab4({required this.setState});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> tab4TableRowTitle = [
+      "Date Of Activity",
+      "Academic Session",
+      "Class",
+      "Term",
+      "Activity Type",
+      "Activity Description",
+    ];
+    List<Map<String, dynamic>> tab4items = [
+      {
+        "type": "dropdown",
+        "hint": "Academic Session",
+        "selectedValue": _tab4AcademicSessionVal,
+        "items": [],
+        "values": [],
+      },
+      {
+        "type": "dropdown",
+        "hint": "Class",
+        "selectedValue": _tab4ClassVal,
+        "items": [],
+        "values": [],
+      },
+      {
+        "type": "dropdown",
+        "hint": "Term",
+        "selectedValue": _tab4TermVal,
+        "items": [],
+        "values": [],
+      },
+      {
+        "type": "date picker",
+        "hint": "From",
+        "controller": _tab4FromController,
+      },
+      {
+        "type": "date picker",
+        "hint": "To",
+        "controller": _tab4ToController,
+      },
+    ];
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < tab4items.length; i++) ...{
+              if (tab4items[i]['type'] == "dropdown") ...{
+                PublicTextWidget(text: tab4items[i]['hint']),
+                const SizedBox(height: 5.0),
+                PublicDropdownWidget(
+                  hint: tab4items[i]['hint'],
+                  items: tab4items[i]['items'],
+                  values: tab4items[i]['values'],
+                  selectedValue: tab4items[i]['selectedValue'],
+                  onSelect: (val) {
+                    tab4items[i]['selectedValue'] = val;
+                    setState('');
+                  },
+                ),
+                const SizedBox(height: 10.0),
+              } else ...{
+                PublicTextWidget(text: tab4items[i]['hint']),
+                const SizedBox(height: 5.0),
+                PublicDatePickerWidget(controller: tab4items[i]['controller']),
+                const SizedBox(height: 10.0),
+              }
+            },
+            PublicTextButton(
+              value: "Display",
+              onPressed: (val) {},
+            ),
+            const SizedBox(height: 10.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Table(
+                defaultColumnWidth: const IntrinsicColumnWidth(),
+                border: TableBorder.all(color: AppTheme().lightDark),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(
+                    children: [
+                      for (int i = 0; i < tab4TableRowTitle.length; i++) ...{
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.top,
+                          child: Container(
+                            color: Colors.blue.shade900,
+                            padding: const EdgeInsets.all(10.0),
+                            child: PublicTextWidget(
+                              text: tab4TableRowTitle[i],
+                              color: AppTheme().bgColor,
+                            ),
+                          ),
+                        ),
+                      }
+                    ],
+                  ),
+                  TableRow(
+                    decoration: BoxDecoration(color: Colors.grey.shade400),
+                    children: [
+                      for (int i = 0; i < tab4TableRowTitle.length; i++)
+                        Container(height: 40),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//============================================================
+// TAB 5 (Finicial Statement Tab)
+//============================================================
+class _Tab5 extends StatelessWidget {
+  final ValueChanged setState;
+  const _Tab5({required this.setState});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> tab5TableRowTitle = [
+      "Trans Date",
+      "Voucher Number",
+      "Trans Source",
+      "Academic Session",
+      "Class",
+      "Debit Amount",
+      "Credit Amount",
+      "Balance Amount",
+    ];
+    List<Map<String, dynamic>> tab5items = [
+      {
+        "hint": "From",
+        "type": "date picker",
+        "controller": _tab4FromController,
+      },
+      {
+        "hint": "To",
+        "type": "date picker",
+        "controller": _tab4ToController,
+      },
+    ];
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (int i = 0; i < tab5items.length; i++) ...{
+              PublicTextWidget(text: tab5items[i]['hint']),
+              const SizedBox(height: 5.0),
+              PublicDatePickerWidget(controller: tab5items[i]['controller']),
+              const SizedBox(height: 10.0),
+            },
+            PublicTextButton(
+              value: "Display",
+              onPressed: (val) {},
+            ),
+            const SizedBox(height: 10.0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Table(
+                defaultColumnWidth: const IntrinsicColumnWidth(),
+                border: TableBorder.all(color: AppTheme().lightDark),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(
+                    children: [
+                      for (int i = 0; i < tab5TableRowTitle.length; i++) ...{
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.top,
+                          child: Container(
+                            color: Colors.blue.shade900,
+                            padding: const EdgeInsets.all(10.0),
+                            child: PublicTextWidget(
+                              text: tab5TableRowTitle[i],
+                              color: AppTheme().bgColor,
+                            ),
+                          ),
+                        ),
+                      }
+                    ],
+                  ),
+                  TableRow(
+                    decoration: BoxDecoration(color: Colors.grey.shade400),
+                    children: [
+                      for (int i = 0; i < tab5TableRowTitle.length; i++)
+                        Container(height: 40),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -510,10 +937,10 @@ class _Tab3 extends StatelessWidget {
 //============================================================
 // REQUIRED VARIABLES
 //============================================================
-bool? _tab1SexVal;
-bool? _tab1ClassVal;
-bool? _tab1SubClassVal;
-bool? _tab1DurabilityVal;
+String? _tab1SexVal;
+String? _tab1ClassVal;
+String? _tab1SubClassVal;
+String? _tab1DurabilityVal;
 TextEditingController _studentNoSearchController = TextEditingController();
 TextEditingController _tab1DateOfBirthController = TextEditingController();
 TextEditingController _tab1FirstNameController = TextEditingController();

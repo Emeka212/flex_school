@@ -12,7 +12,7 @@ import '../pages/users_dashboard/dashboard/student/gradute_stop_student_admissio
 import '../pages/users_dashboard/dashboard/student/parent_managemen.dart';
 import '../pages/users_dashboard/dashboard/student/record_scores.dart';
 import '../pages/users_dashboard/dashboard/student/student_ativities.dart';
-import '../pages/users_dashboard/dashboard/student/student_attendane.dart';
+import '../pages/users_dashboard/dashboard/student/student_attendance.dart';
 import '../pages/users_dashboard/dashboard/student/student_invoice.dart';
 import '../pages/users_dashboard/dashboard/student/student_management.dart';
 import '../pages/users_dashboard/dashboard/student/student_promotion.dart';
@@ -41,37 +41,6 @@ const String processPage = "processPage";
 //======================================================================
 // School Users Pages String
 //======================================================================
-// const String userLoginPage = "userLoginPage";
-
-// const String schoolUserEntriesDefinitionPage = "schoolUserEntriesDefinitionPage";
-// const String schoolUserParametersPage = "schoolUserParametersPage";
-// const String schoolUserResultSettingsPage = "schoolUserResultSettingsPage";
-// const String schoolUserInvoiceReceiptSettingPage = "schoolUserInvoiceReceiptSettingPage";
-// const String schoolUserTimeTableManagementPage = "schoolUserTimeTableManagementPage";
-
-// const String schoolUserIndexPage = "schoolUserIndexPage";
-// const String schoolUserEmailSmsPage = "schoolUserEmailSmsPage";
-// const String userForgotPasswordPage = "userForgotPasswordPage";
-// const String schoolUserListStudentPage = "schoolUserListStudentPage";
-// const String schoolUserRecordScoresPage = "schoolUserRecordScoresPage";
-// const String schoolUserPrintPrefectsPage = "schoolUserPrintPrefectsPage";
-// const String schoolUserStudentReceiptPage = "schoolUserStudentReceiptPage";
-// const String schoolUserStudentInvoicePage = "schoolUserStudentInvoicePage";
-// const String schoolUserPrintDeborsListPage = "schoolUserPrintDeborsListPage";
-// const String schoolUserStudentManagementPage = "schoolUserSudenManagementPage";
-// const String schoolUserParentManagementPage = "schoolUserParentManagementPage";
-// const String schoolUserStudentPromotionPage = "schoolUserStudentPromotionPage";
-// const String schoolUserStudentActivitiesPage =
-//     "schoolUserStudentActivitiesPage";
-// const String schoolUserStudentAttendancePage =
-//     "schoolUserStudentAttendancePage";
-// const String schoolUserCalenderEvenNoticePage =
-//     "schoolUserCalenderEvenNoticePage";
-// const String schoolUserGenerateStudentResultPage =
-//     "schoolUserGenerateStudentResultPage";
-// const String schoolUserGraduteStopStudentAdmissionPage =
-//     "schoolUserGraduteStopStudentAdmissionPage";
-
 const String userLoginPage = "userLoginPage";
 const String schoolUserIndexPage = "schoolUserIndexPage";
 const String schoolUserEmailSmsPage = "schoolUserEmailSmsPage";

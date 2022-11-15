@@ -9,11 +9,13 @@ import 'package:flex_school/theme/theme.dart';
 class PublicAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? color;
   final String title;
-  const PublicAppBar({super.key, required this.title, this.color});
+  final PreferredSizeWidget? bottom;
+  const PublicAppBar({super.key, required this.title, this.color, this.bottom});
   @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0.0,
+      bottom: bottom,
       title: Text(title),
       backgroundColor: color ?? AppTheme().primaryColor,
       actions: [
@@ -229,7 +231,7 @@ class PublicIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => onPressed,
+      onPressed: () => onPressed(''),
       icon: icon,
     );
   }
